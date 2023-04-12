@@ -1,9 +1,25 @@
-out_to_console yes
-out_to_x no
-background no
-update_interval 2
-total_run_times 0
-use_spacer left 
+conky.config = {
+    own_window = true,
+    own_window_hints = 'undecorated below sticky skip_taskbar skip_pager',
+    own_window_type = 'override',
+    alignment = 'bottom_right',
+--    own_window = false,
+    out_to_x = true,
+    background = true,
+--    out_to_console = true,
+    minimum_width = 1366,
+    use_xft = true,
+    double_buffer = true,
+    use_spacer = 'left',
+    pad_percents = 2,
+    short_units = true,
+    update_interval = 1,
+    font = "Envy Code R:size=10",
+    gap_x = -5,
+    gap_y = 0
+}
 
-TEXT
-CPU ${cpu cpu1}% ${loadavg 1} :: RAM $memperc% $mem :: TEMP ${acpitemp}C :: BAT ${battery_percent}% :: NET ${wireless_essid wlp1s0} ${downspeed wlp1s0} ${upspeed wlp1s0} :: ${time %a %b %d %I:%M%P}
+-- Arch Linux - dwm | INET ${wireless_essid wlp4s0} UP ${upspeed wlp4s0} DN ${downspeed wlp4s0} | TEMP ${acpitemp}C | MEM $memperc% | SWAP $swapperc% | CPU $cpu% | DISK I/O R $diskio_read W $diskio_write | BAT0 ${battery BAT0} ${battery_time BAT0} BAT1 ${battery BAT1} | VOL ${exec amixer -c 0 get Master | grep Mono: | cut -d " " -f6,8} | 
+conky.text = [[
+Arch Linux - dwm | INET ${if_up wlp4s0}${wireless_essid wlp4s0} UP ${upspeed wlp4s0} DN ${downspeed wlp4s0}${endif}${if_up enp0s31f6}ETH0 UP ${upspeed enp0s31f6} DN ${downspeed enp0s31f6}${endif}| TEMP ${acpitemp}C | MEM $memperc% | SWAP $swapperc% | CPU $cpu% | BAT0 ${battery BAT0} ${battery_time BAT0} BAT1 ${battery BAT1} | VOL ${exec amixer -c 0 get Master | grep Mono: | cut -d " " -f6,8} 
+]]
