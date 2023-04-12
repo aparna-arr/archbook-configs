@@ -1,0 +1,109 @@
+--- ../../../dwm-ACTUALLY-CLEAN/src/dwm-6.1/dwm.c	2015-11-08 14:39:37.000000000 -0800
++++ dwm.c	2015-11-20 10:58:03.312881538 -0800
+@@ -64,7 +64,7 @@
+        NetWMFullscreen, NetActiveWindow, NetWMWindowType,
+        NetWMWindowTypeDialog, NetClientList, NetLast }; /* EWMH atoms */
+ enum { WMProtocols, WMDelete, WMState, WMTakeFocus, WMLast }; /* default atoms */
+-enum { ClkTagBar, ClkLtSymbol, ClkStatusText, ClkWinTitle,
++enum { ClkTagBar, ClkLtSymbol, ClkStatusText,
+        ClkClientWin, ClkRootWin, ClkLast }; /* clicks */
+ 
+ typedef union {
+@@ -438,10 +438,8 @@
+ 			arg.ui = 1 << i;
+ 		} else if (ev->x < x + blw)
+ 			click = ClkLtSymbol;
+-		else if (ev->x > selmon->ww - TEXTW(stext))
+-			click = ClkStatusText;
+ 		else
+-			click = ClkWinTitle;
++			click = ClkStatusText;
+ 	} else if ((c = wintoclient(ev->window))) {
+ 		focus(c);
+ 		click = ClkClientWin;
+@@ -704,6 +702,7 @@
+ void
+ drawbar(Monitor *m)
+ {
++	
+ 	int x, xx, w, dx;
+ 	unsigned int i, occ = 0, urg = 0;
+ 	Client *c;
+@@ -729,7 +728,7 @@
+ 	drw_text(drw, x, 0, w, bh, m->ltsymbol, 0);
+ 	x += w;
+ 	xx = x;
+-	if (m == selmon) { /* status is only drawn on selected monitor */
++	if (m == selmon) { // status is only drawn on selected monitor 
+ 		w = TEXTW(stext);
+ 		x = m->ww - w;
+ 		if (x < xx) {
+@@ -741,16 +740,17 @@
+ 		x = m->ww;
+ 	if ((w = x - xx) > bh) {
+ 		x = xx;
+-		if (m->sel) {
+-			drw_setscheme(drw, m == selmon ? &scheme[SchemeSel] : &scheme[SchemeNorm]);
+-			drw_text(drw, x, 0, w, bh, m->sel->name, 0);
+-			drw_rect(drw, x + 1, 1, dx, dx, m->sel->isfixed, m->sel->isfloating, 0);
+-		} else {
++//		if (m->sel) {
++//			drw_setscheme(drw, m == selmon ? &scheme[SchemeSel] : &scheme[SchemeNorm]);
++//			drw_text(drw, x, 0, w, bh, m->sel->name, 0);
++//			drw_rect(drw, x + 1, 1, dx, dx, m->sel->isfixed, m->sel->isfloating, 0);
++//		} else {
+ 			drw_setscheme(drw, &scheme[SchemeNorm]);
+ 			drw_rect(drw, x, 0, w, bh, 1, 0, 1);
+-		}
++//		}
+ 	}
+ 	drw_map(drw, m->barwin, 0, 0, m->ww, bh);
++
+ }
+ 
+ void
+@@ -1038,7 +1038,6 @@
+ 
+ 	c = ecalloc(1, sizeof(Client));
+ 	c->win = w;
+-	updatetitle(c);
+ 	if (XGetTransientForHint(dpy, w, &trans) && (t = wintoclient(trans))) {
+ 		c->mon = t->mon;
+ 		c->tags = t->tags;
+@@ -1252,11 +1251,8 @@
+ 			drawbars();
+ 			break;
+ 		}
+-		if (ev->atom == XA_WM_NAME || ev->atom == netatom[NetWMName]) {
+-			updatetitle(c);
+-			if (c == c->mon->sel)
+-				drawbar(c->mon);
+-		}
++//		if (ev->atom == XA_WM_NAME || ev->atom == netatom[NetWMName])
++//			updatetitle(c);
+ 		if (ev->atom == netatom[NetWMWindowType])
+ 			updatewindowtype(c);
+ 	}
+@@ -1876,9 +1872,9 @@
+ 					dirty = 1;
+ 					m->num = i;
+ 					m->mx = m->wx = unique[i].x_org;
+-					m->my = m->wy = unique[i].y_org;
++					m->my = m->wy = unique[i].y_org + TOP_BAR_HEIGHT;
+ 					m->mw = m->ww = unique[i].width;
+-					m->mh = m->wh = unique[i].height;
++					m->mh = m->wh = showbar ? unique[i].height - bh - TOP_BAR_HEIGHT : unique[i].height;
+ 					updatebarpos(m);
+ 				}
+ 		} else {
+@@ -1983,10 +1979,6 @@
+ void
+ updatetitle(Client *c)
+ {
+-	if (!gettextprop(c->win, netatom[NetWMName], c->name, sizeof c->name))
+-		gettextprop(c->win, XA_WM_NAME, c->name, sizeof c->name);
+-	if (c->name[0] == '\0') /* hack to mark broken clients */
+-		strcpy(c->name, broken);
+ }
+ 
+ void
