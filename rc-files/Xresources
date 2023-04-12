@@ -1,0 +1,22 @@
+! urxvt
+URxvt*buffered: true
+URxvt*cursorBlink: true
+URxvt*font: xft:Envy Code R:size=10
+URxvt*boldFont: xft:Envy Code R:bold:size=10
+URxvt*depth: 32
+URxvt*scrollBar: false
+!URxvt*loginShell: true
+Urxvt*secondaryScroll:  true    # Enable Shift-PageUp/Down in screen
+URxvt*saveLines: 5000
+!URxvt*termName: rxvt-unicode-256color
+URxvt.perl-ext-common: default,matcher
+URxvt.urlLauncher: firefox
+URxvt.matcher.button: 1
+
+!TXT Normal, Normal, Cursor
+!#define _foreground    #dcdccc
+!#define _background    #030303
+
+URxvt*foreground     : #dcdccc
+URxvt*background     : #030303
+

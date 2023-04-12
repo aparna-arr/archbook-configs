@@ -1,0 +1,9 @@
+out_to_console yes
+out_to_x no
+background no
+update_interval 2
+total_run_times 0
+use_spacer left 
+
+TEXT
+CPU ${cpu cpu1}% ${loadavg 1} :: RAM $memperc% $mem :: TEMP ${acpitemp}C :: BAT ${battery_percent}% :: NET ${wireless_essid wlp1s0} ${downspeed wlp1s0} ${upspeed wlp1s0} :: ${time %a %b %d %I:%M%P}
